@@ -98,8 +98,56 @@ public:
 	}
 };
 
+class problem1_4 {
+public:
+	void replaceSpaces(char *str, int length) {
+		int numOfSpace = 0;
+		for (int i = 0; i < length; i++) {
+			if (*(str + i) == ' ')
+				numOfSpace++;		
+		}
+		int end = length + numOfSpace * 2;
+		int i = end;
+		int j = length - 1;
+		while (i >= 0) {
+			if (i == end) {
+				*(str + i) = '\0';
+				i--;
+				continue;
+			}
+			if (*(str + j) != ' '){
+				*(str + i) = *(str + j);
+				i--;
+			}
+			else {
+				*(str + i) = '0';
+				i--;
+				*(str + i) = '2';
+				i--;
+				*(str + i) = '%';
+				i--;
+			}
+			j--;
+		}
+	}
+
+	void test() {
+		char *str = (char*)malloc(5 + 1);
+		*str = 'a';
+		*(str + 1) = ' ';
+		*(str + 2) = 'b';
+		*(str + 3) = '\0';
+		replaceSpaces(str, 3);
+		cout << str << endl;
+		free(str);
+	}
+
+};
+
+class 
+
 int main() {
-	problem1_3 test;
+	problem1_4 test;
 	test.test();
 	return 0;
 }
