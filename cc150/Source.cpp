@@ -27,9 +27,41 @@ public:
 	}
 };
 
-class problem1_2
+class problem1_2 {
+public:
+	void reverse(char *str) {
+		char* end = str;
+		char tmp;
+		if (str) {
+			while (*end) {
+				end++;
+			}
+		}
+		end--;
+
+		while (str < end) {
+			char tmp = *end;
+			*end = *str;
+			*str = tmp;
+			str++;
+			end--;
+		}
+	}
+
+	void test() {
+		char str[] =  "abc" ;
+		reverse(str);
+		char* base = str;
+		cout << "reversed : "<< str << endl;
+		//while (*base) {
+		//	cout << *base;
+		//	base++;
+		//}
+	}
+};
 
 int main() {
-
-
+	problem1_2 test;
+	test.test();
+	return 0;
 }
