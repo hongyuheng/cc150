@@ -29,7 +29,7 @@ public:
 
 class problem1_2
 
-	int main() {
+int main() {
 
 
 }
