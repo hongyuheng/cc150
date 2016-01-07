@@ -9,6 +9,13 @@
 #include <sstream>
 using namespace std;
 
+class ListNode {
+public:
+	int val;
+	ListNode* next;
+	ListNode(int val): val(val) ,next(NULL) {}
+};
+
 template<typename T>
 
 void printMatrix(const vector<vector<T>>& matrix) {
@@ -312,9 +319,133 @@ public:
 	}
 };
 
+class problem1_8 {
+public:
+	bool isRotation(string str1, string str2) {
+		int len = str1.size();
+		if (len = str2.size() && len > 0) {
+			string ss = str1 + str1;
+			return isSubstring(ss, str2);
+		}
 
+		return false;
+	}
+
+	bool isSubstring(string haystack, string needle) {
+		int hlen = haystack.size();
+		int nlen = needle.size();
+		unordered_map<char, char> jump;
+		for (int i = 0; i < haystack.size(); i++) {
+			jump[haystack[i]] = -1;
+		}
+
+		for (int i = 0; i < nlen; i++) {
+			jump[needle[i]] = i;
+		}
+		int skip = 0;
+		for (int i = 0; i < hlen - nlen + 1; i += skip) {
+			skip = 0;
+			for (int j = nlen - 1; j >= 0; j--) {
+				if (haystack[i + j] != needle[j]) {
+					skip = max(1, j - jump[haystack[i + j]]);
+					break;
+				}
+			}
+			if (skip == 0) {
+				cout << "Find Position at : " << i << endl;
+				return true;
+			}
+		}
+		cout << "False" << endl;
+		return false;
+	}
+
+	void test() {
+		string str1 = "abc";
+		string str2 = "cba";
+		cout << isRotation(str1, str2);
+	}
+};
+
+class problem2_1 {
+public:
+	void deleteDups(ListNode* root) {
+		if (root == NULL)
+			return;
+		unordered_set<int> set;
+		ListNode* pre = new ListNode(-1);
+		ListNode* cur = root;
+		pre->next = cur;
+		while (cur != NULL) {
+			if (set.find(cur -> val) != set.end()) {
+				pre->next = cur->next;
+				delete cur;
+				cur = pre->next;
+			}
+			else {
+				set.insert(cur -> val);
+				pre = cur;
+				cur = cur->next;
+			}
+		}
+	}
+
+	void test() {
+		int n = 4;
+		ListNode* point = new ListNode(-1);
+		ListNode* head = point;
+		for (int i = 0; i < n; i++) {
+			ListNode *tmp = new ListNode(i);
+			point -> next = tmp;
+			point = point->next;
+		}
+		point = head;
+		point = point->next->next->next;
+		point->val = 1;
+		deleteDups(head);
+	}
+
+};
+
+class problem2_4 {
+public:
+	ListNode* partition(ListNode* root, int x) {
+		ListNode *leftHead = new ListNode(-1);
+		ListNode *rightHead = new ListNode(-1);
+		ListNode *lDummy = leftHead, *rDummy = rightHead;
+		
+		while (root != NULL) {
+			if (root->val < x) {
+				leftHead->next = root;
+				leftHead = leftHead->next;
+			}
+			else {
+				rightHead->next = root;
+				rightHead = rightHead->next;
+			}
+			root = root->next;
+		}
+
+		leftHead->next = rDummy->next;
+		return lDummy->next;
+	}
+
+	void test() {
+		int n = 4;
+		ListNode* point = new ListNode(5);
+		ListNode* head = point;
+		for (int i = 0; i < n; i++) {
+			ListNode *tmp = new ListNode(n-i);
+			point->next = tmp;
+			point = point->next;
+		}
+		point = head;
+		partition(head, 3);
+	
+	}
+};
 int main() {
-	problem1_7 test;
+	problem2_4 test;
 	test.test();
 	return 0;
 }
