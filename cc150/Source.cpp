@@ -7,7 +7,14 @@
 #include <algorithm>
 #include <math.h>
 #include <sstream>
+#include <queue>
 using namespace std;
+class TreeNode {
+public:
+	int val;
+	TreeNode *left, *right;
+	TreeNode(int val) : val(val), left(NULL), right(NULL) {}
+};
 
 class ListNode {
 public:
@@ -444,8 +451,133 @@ public:
 	
 	}
 };
+
+class problem3_6 {
+public:
+	ListNode* findBeginning(ListNode* head) {
+		ListNode *slow = head;
+		ListNode *fast = head;
+		while (slow != NULL && fast != NULL) {
+			slow = slow->next;
+			fast = fast->next->next;
+			if (slow == fast) {
+				break;
+			}
+		}
+		if (slow != NULL && fast != NULL) {
+			slow = head;
+			while (slow != fast) {
+				slow = slow->next;
+				fast = fast->next;
+			}
+		}
+		
+		cout << slow->val << endl;
+		return slow;
+	}
+
+	void test() {
+		int n = 7;
+		ListNode* point = new ListNode(0);
+		ListNode* head = point;
+		ListNode* pre = head;
+		for (int i = 0; i < n; i++) {
+			ListNode *tmp = new ListNode(i+1);
+			point->next = tmp;
+			pre = point;
+			point = point->next;
+		}
+		pre->next = head->next->next->next;
+		findBeginning(head);
+	}
+};
+
+class problem3_4 {
+public:
+	void moveDisks(int n, string origin, string destination, string buffer) {
+		if (n <= 0)
+			return;
+
+		moveDisks(n - 1, origin, buffer, destination);
+		cout << "Move " << n << " from " << origin << " to " << destination << endl;
+		moveDisks(n - 1, buffer, destination, origin);
+	}
+
+	void test() {
+	
+		moveDisks(10, "origin", "destination", "buffer");
+
+	}
+
+
+};
+
+class treeAverage {
+public:
+	vector<double> calAverage(TreeNode* root) {
+		vector<double> res;
+		vector<int> line;
+		queue<TreeNode*> Q;
+		Q.push(root);
+		Q.push(NULL);
+		while (!Q.empty()) {
+			TreeNode* cur = Q.front();
+			Q.pop();
+			if (cur == NULL) {
+				res.push_back(ave(line));
+				line.clear();
+				if (Q.empty())
+					break;
+				Q.push(NULL);
+				continue;
+			}
+
+			line.push_back(cur->val);
+			if(cur->left)
+				Q.push(cur->left);
+			if(cur->right)
+				Q.push(cur->right);
+
+		}
+		return res;
+	}
+
+	double ave(vector<int> line) {
+		double sum = 0;
+		for (int i = 0; i < line.size(); i++) {
+			sum += line[i];
+		}
+		return sum / line.size();
+	}
+
+	void test() {
+		TreeNode* A = new TreeNode(1);
+		TreeNode* B = new TreeNode(2);
+		TreeNode* C = new TreeNode(3);
+		TreeNode* D = new TreeNode(4);
+		TreeNode* E = new TreeNode(5);
+		TreeNode* F = new TreeNode(6);
+		TreeNode* G = new TreeNode(7);
+		A->left = B;
+		A->right = C;
+		B->left = D;
+		B->right = E;
+		C->left = F;
+		C->right = G;
+		vector<double> res = calAverage(A);
+		for (int i = 0; i < res.size(); i++) {
+			cout << res[i] << " ";
+		}
+
+	}
+};
+
+
+
 int main() {
-	problem2_4 test;
+	treeAverage sol;
+	sol.test();
+	problem3_4 test;
 	test.test();
 	return 0;
 }
